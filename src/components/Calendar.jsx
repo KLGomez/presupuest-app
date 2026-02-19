@@ -100,16 +100,17 @@ const Calendar = () => {
      */
     const handleConvertToExpense = (maturity) => {
         playSuccess();
-        // Register expense + mark maturity paid atomically
+        // Atomically register expense + mark maturity paid
         convertMaturityToExpense(maturity);
-        // Also pre-fill the tracker form so the user sees the data
+        // Pre-fill tracker form — App.jsx useEffect will auto-open the panel
         setExpenseToPrefill({
             amount: maturity.amount,
             description: maturity.service,
             type: maturity.type,
             date: maturity.date,
         });
-        setActiveTab('expenses'); // opens expense panel overlay in App
+        // Close the day popup
+        setSelectedDay(null);
     };
 
     const handleToggleStatus = (id) => {
@@ -128,8 +129,8 @@ const Calendar = () => {
 
     // ── Render ─────────────────────────────────────────────────────────────
     return (
-        <div className="max-w-4xl mx-auto pb-6 relative">
-            <NoteCard color="white" type="taped" className="min-h-[600px] overflow-visible">
+        <div className="w-full relative">
+            <NoteCard color="white" type="taped" className="overflow-visible">
                 <h2 className="text-2xl font-bold font-hand text-slate-700 mb-6 flex items-center justify-between">
                     <span>📅 Vencimientos: {selectedMonth}</span>
                     <div className="text-xs font-sans text-slate-400 font-normal">
@@ -138,72 +139,77 @@ const Calendar = () => {
                 </h2>
 
                 {/* ── Day-of-week headers ── */}
-                <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2">
-                    {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => (
-                        <div key={d} className="text-center font-hand font-bold text-slate-500 py-2 border-b-2 border-slate-100">
+                <div className="grid grid-cols-7 gap-2 sm:gap-3 mb-2">
+                    {['Lun', 'Mar', 'Mié', 'Jue', 'Vié', 'Sáb', 'Dom'].map(d => (
+                        <div key={d} className="text-center font-hand font-bold text-slate-500 py-2 text-xs sm:text-sm border-b-2 border-neutral-200">
                             {d}
                         </div>
                     ))}
                 </div>
 
                 {/* ── Calendar grid ── */}
-                <div className="grid grid-cols-7 auto-rows-[minmax(80px,1fr)] gap-1 md:gap-2 bg-slate-50/50 p-2 rounded-lg border border-slate-100">
-                    {blanks.map(b => (
-                        <div key={`blank-${b}`} className="bg-transparent" />
-                    ))}
+                <div className="w-full overflow-x-auto">
+                    <div className="grid grid-cols-7 gap-2 sm:gap-3 bg-neutral-50 p-3 rounded-xl border border-neutral-200">
+                        {blanks.map(b => (
+                            <div key={`blank-${b}`} className="aspect-square min-w-[42px]" />
+                        ))}
 
-                    {days.map(day => {
-                        const maturities = getDayMaturities(day);
-                        const isDayPast = isPast(day);
-                        const hasPending = maturities.some(m => m.status === 'pending');
-                        const isAlert = isDayPast && hasPending;
-                        const isCurrentDay = isToday(day);
+                        {days.map(day => {
+                            const maturities = getDayMaturities(day);
+                            const isDayPast = isPast(day);
+                            const hasPending = maturities.some(m => m.status === 'pending');
+                            const isAlert = isDayPast && hasPending;
+                            const isCurrentDay = isToday(day);
 
-                        return (
-                            <div
-                                key={day}
-                                onClick={() => handleDayClick(day)}
-                                className={`
-                                    relative p-1 md:p-2 rounded-md border text-left transition-all cursor-pointer group hover:shadow-md
+                            return (
+                                <div
+                                    key={day}
+                                    onClick={() => handleDayClick(day)}
+                                    className={`
+                                    h-16 sm:h-20 md:h-24 relative rounded-xl border p-2
+                                    flex flex-col justify-between
+                                    cursor-pointer transition hover:shadow-md
+                                    text-xs sm:text-sm
                                     ${isCurrentDay
-                                        ? 'bg-yellow-50 border-yellow-200 shadow-sm'
-                                        : 'bg-white border-slate-200 hover:border-blue-300'
-                                    }
+                                            ? 'bg-yellow-50 border-yellow-200 shadow-sm'
+                                            : 'bg-white border-neutral-200 hover:bg-neutral-50'
+                                        }
                                 `}
-                            >
-                                <span className={`
+                                >
+                                    <span className={`
                                     font-hand font-bold text-lg leading-none block
                                     ${isCurrentDay ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}
                                 `}>
-                                    {day}
-                                </span>
+                                        {day}
+                                    </span>
 
-                                {/* Alert icon — pulsing if overdue + pending */}
-                                {isAlert && (
-                                    <motion.div
-                                        animate={{ scale: [1, 1.25, 1], opacity: [1, 0.6, 1] }}
-                                        transition={{ repeat: Infinity, duration: 1.4 }}
-                                        className="absolute top-1 right-1 text-red-500"
-                                    >
-                                        <AlertCircle size={14} />
-                                    </motion.div>
-                                )}
+                                    {/* Alert icon — pulsing if overdue + pending */}
+                                    {isAlert && (
+                                        <motion.div
+                                            animate={{ scale: [1, 1.25, 1], opacity: [1, 0.6, 1] }}
+                                            transition={{ repeat: Infinity, duration: 1.4 }}
+                                            className="absolute top-1 right-1 text-red-500"
+                                        >
+                                            <AlertCircle size={14} />
+                                        </motion.div>
+                                    )}
 
-                                {/* Maturity dots — color by type */}
-                                <div className="flex flex-wrap gap-[3px] mt-1">
-                                    {maturities.map(m => (
-                                        <div
-                                            key={m.id}
-                                            title={`${m.service} — ${formatCurrency(m.amount)} (${m.status === 'paid' ? 'Pagado' : 'Pendiente'})`}
-                                            className={`w-2 h-2 rounded-full border border-black/10 transition-opacity ${m.status === 'paid' ? 'opacity-35' : ''}`}
-                                            style={{ backgroundColor: m.status === 'paid' ? '#94a3b8' : getTypeColor(m.type) }}
-                                        />
-                                    ))}
+                                    {/* Maturity dots — color by type */}
+                                    <div className="flex flex-wrap gap-[3px] mt-1">
+                                        {maturities.map(m => (
+                                            <div
+                                                key={m.id}
+                                                title={`${m.service} — ${formatCurrency(m.amount)} (${m.status === 'paid' ? 'Pagado' : 'Pendiente'})`}
+                                                className={`w-2 h-2 rounded-full border border-black/10 transition-opacity ${m.status === 'paid' ? 'opacity-35' : ''}`}
+                                                style={{ backgroundColor: m.status === 'paid' ? '#94a3b8' : getTypeColor(m.type) }}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
+                </div>{/* end overflow-x-auto */}
             </NoteCard>
 
             {/* ── Day popup ─────────────────────────────────────────────── */}

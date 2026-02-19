@@ -67,7 +67,7 @@ const ExpenseTracker = ({ onClose }) => {
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">Monto</label>
-                        <div className="input-currency-wrapper" style={{ maxWidth: '100%' }}>
+                        <div className="input-currency-wrapper w-full">
                             <span className="input-currency-symbol font-hand">$</span>
                             <input type="number" value={formData.amount} onChange={e => setFormData({ ...formData, amount: e.target.value })} placeholder="0.00" className="input-currency text-lg" autoFocus required min="0.01" step="0.01" />
                         </div>
