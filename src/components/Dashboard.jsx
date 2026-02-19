@@ -4,6 +4,7 @@ import { EXPENSE_TYPES } from '../utils/constants';
 import { useSound } from '../context/SoundContext';
 import Almanac from './Almanac';
 import BudgetPlanner from './BudgetPlanner';
+import Calendar from './Calendar';
 
 const Dashboard = ({ activeSection = 'dashboard' }) => {
     const { data, categories, setFilterType } = usePlanner();
@@ -62,6 +63,11 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
             </span>
         );
     };
+
+    // Calendar section view
+    if (activeSection === 'calendar') {
+        return <Calendar />;
+    }
 
     // Planning section view
     if (activeSection === 'planning') {
@@ -206,8 +212,8 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
                                                 {stat.name[0]}
                                             </div>
                                             <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${stat.status === 'success' ? 'bg-emerald-500' :
-                                                    stat.status === 'warning' ? 'bg-amber-400' :
-                                                        stat.status === 'danger' ? 'bg-red-500' : 'bg-slate-300'
+                                                stat.status === 'warning' ? 'bg-amber-400' :
+                                                    stat.status === 'danger' ? 'bg-red-500' : 'bg-slate-300'
                                                 }`} />
                                         </div>
                                         <div>
