@@ -20,12 +20,12 @@ const PlannerLayout = () => {
   }, [expenseToPrefill]);
 
   return (
-    <div className="min-h-screen flex justify-center">
-      <div className="w-full max-w-6xl px-8 py-10">
+    <div className="min-h-screen flex justify-center bg-[#f8f6f2] bg-[linear-gradient(#e5e2dc_1px,transparent_1px),linear-gradient(90deg,#e5e2dc_1px,transparent_1px)] bg-[size:40px_40px]">
+      <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pb-8 space-y-6">
         <Header />
 
         {/* Top Bar: Controls */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between">
           {/* Minimal Section Tabs */}
           <div className="flex items-center gap-1 bg-white/60 backdrop-blur-sm rounded-lg p-1 shadow-sm border border-slate-200/50">
             {[
@@ -67,7 +67,7 @@ const PlannerLayout = () => {
         </div>
 
         {/* Main Content */}
-        <div className="pb-8">
+        <div>
           <Dashboard activeSection={activeTab} />
         </div>
 

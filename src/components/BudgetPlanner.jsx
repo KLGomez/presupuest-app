@@ -10,7 +10,7 @@ const BudgetPlanner = () => {
     const remaining = data.income - totalBudgeted;
 
     return (
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="w-full bg-white rounded-2xl shadow-xl shadow-neutral-400/20 border border-neutral-200/60 p-6 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
             <h2 className="text-xl font-bold font-hand text-slate-700 mb-6 pb-4 border-b border-slate-100">
                 📝 Planificación Mensual
             </h2>
@@ -20,7 +20,7 @@ const BudgetPlanner = () => {
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">
                     Ingreso Estimado
                 </label>
-                <div className="input-currency-wrapper" style={{ maxWidth: '200px' }}>
+                <div className="input-currency-wrapper max-w-[200px]">
                     <span className="input-currency-symbol font-hand">$</span>
                     <input
                         type="number"
@@ -63,7 +63,7 @@ const BudgetPlanner = () => {
                         <label className="flex-1 text-base font-hand font-bold text-slate-700 truncate">
                             {cat.name}
                         </label>
-                        <div className="input-currency-wrapper" style={{ maxWidth: '120px' }}>
+                        <div className="input-currency-wrapper max-w-[120px]">
                             <span className="input-currency-symbol font-hand text-sm">$</span>
                             <input
                                 type="number"

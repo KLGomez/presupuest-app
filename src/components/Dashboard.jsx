@@ -66,20 +66,24 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
 
     // Calendar section view
     if (activeSection === 'calendar') {
-        return <Calendar />;
+        return (
+            <div className="w-full max-w-3xl mx-auto mt-6">
+                <Calendar />
+            </div>
+        );
     }
 
     // Planning section view
     if (activeSection === 'planning') {
         return (
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                <div className="lg:col-span-3 space-y-6">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div className="xl:col-span-2 flex flex-col gap-6">
                     <BudgetPlanner />
                 </div>
-                <div className="lg:col-span-2 space-y-6">
+                <div className="flex flex-col gap-6">
                     <Almanac />
                     {/* Quick summary */}
-                    <div className="bg-white rounded-xl shadow-md p-6">
+                    <div className="w-full bg-white rounded-2xl shadow-xl shadow-neutral-400/20 border border-neutral-200/60 p-6 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
                         <h3 className="text-lg font-bold font-hand text-slate-600 mb-4">Resumen Rápido</h3>
                         <div className="space-y-3">
                             <div className="flex justify-between">
@@ -103,10 +107,10 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
 
     // Dashboard (default) view
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* LEFT COLUMN: Resumen del Mes (40%) */}
-            <div className="lg:col-span-2 space-y-6">
-                <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            {/* LEFT COLUMN: Resumen del Mes */}
+            <div className="flex flex-col gap-6">
+                <div className="w-full bg-white rounded-2xl shadow-xl shadow-neutral-400/20 border border-neutral-200/60 p-6 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold font-hand text-slate-700">📌 Resumen del Mes</h2>
                     </div>
@@ -152,47 +156,60 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
                         </div>
                     </div>
 
-                    {/* Donut Chart */}
+                    {/* Donut Chart — Pastel style */}
                     <div className="pt-6 border-t border-slate-100">
                         <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Distribución por Tipo</h3>
-                        <div className="flex justify-center mb-4">
-                            <div
-                                className="h-32 w-32 rounded-full relative shadow-inner"
-                                style={{
-                                    background: totalExpensesAll > 0
-                                        ? `conic-gradient(${typeStats.map((stat, i, arr) => {
-                                            const prev = arr.slice(0, i).reduce((a, c) => a + c.percentage, 0);
-                                            return `${stat.color} ${prev}% ${prev + stat.percentage}%`;
-                                        }).join(', ')})`
-                                        : '#f1f5f9'
-                                }}
-                            >
-                                <div className="absolute inset-4 bg-white rounded-full flex items-center justify-center shadow-sm">
-                                    <span className="text-[10px] font-bold text-slate-400">
-                                        {totalExpensesAll === 0 ? 'Sin datos' : ''}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-                            {typeStats.map(stat => (
-                                <div key={stat.id} className="flex items-center gap-1.5">
-                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: stat.color }} />
-                                    <span className="text-[11px] font-bold text-slate-500">{stat.label} {Math.round(stat.percentage)}%</span>
-                                </div>
-                            ))}
-                        </div>
+                        {/* pastelColors index matches EXPENSE_TYPES order */}
+                        {(() => {
+                            const pastelColors = ["#A8D8EA", "#FFB7B2", "#FFDAC1", "#E2F0CB", "#B5EAD7", "#C7CEEA"];
+                            const colored = typeStats.map((stat, i) => ({ ...stat, pastel: pastelColors[i % pastelColors.length] }));
+                            return (
+                                <>
+                                    {/* Donut */}
+                                    <div className="h-64 w-full flex items-center justify-center mb-4">
+                                        <div
+                                            className="h-48 w-48 rounded-full relative"
+                                            style={{
+                                                background: totalExpensesAll > 0
+                                                    ? `conic-gradient(${colored.map((stat, i, arr) => {
+                                                        const prev = arr.slice(0, i).reduce((a, c) => a + c.percentage, 0);
+                                                        return `${stat.pastel} ${prev}% ${prev + stat.percentage}%`;
+                                                    }).join(', ')})`
+                                                    : '#f1f5f9',
+                                                boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+                                            }}
+                                        >
+                                            {/* White cutout ring ≈ 60% cutout */}
+                                            <div className="absolute inset-8 bg-white rounded-full flex items-center justify-center shadow-sm border-2 border-white">
+                                                <span className="text-[10px] font-bold text-slate-400">
+                                                    {totalExpensesAll === 0 ? 'Sin datos' : ''}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Legend */}
+                                    <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+                                        {colored.map(stat => (
+                                            <div key={stat.id} className="flex items-center gap-1.5">
+                                                <div className="w-3 h-3 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: stat.pastel }} />
+                                                <span className="text-[11px] font-bold text-slate-500">{stat.label} {Math.round(stat.percentage)}%</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            );
+                        })()}
                     </div>
                 </div>
             </div>
 
-            {/* RIGHT COLUMN: Planificación Mensual (60%) */}
-            <div className="lg:col-span-3 space-y-6">
+            {/* RIGHT COLUMN: Planificación Mensual */}
+            <div className="xl:col-span-2 flex flex-col gap-6 min-h-0">
                 {/* Almanac Widget - compact */}
                 <Almanac />
 
                 {/* Category Planning Card */}
-                <div className="bg-white rounded-xl shadow-lg p-8">
+                <div className="w-full bg-white rounded-2xl shadow-xl shadow-neutral-400/20 border border-neutral-200/60 p-6 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
                         <h2 className="text-xl font-bold font-hand text-slate-700">📝 Planificación Mensual</h2>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{categories.length} Categorías</span>

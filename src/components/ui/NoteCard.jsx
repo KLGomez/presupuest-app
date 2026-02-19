@@ -23,8 +23,7 @@ const NoteCard = ({ children, className = '', rotate = 0, color = 'white', type 
                 damping: 15,
                 delay: delay
             }}
-            className={`relative p-6 ${getBackground()} paper-shadow ${className}`}
-            style={{ borderRadius: '2px' }} // Slightly less rounded for paper feel
+            className={`relative p-6 ${getBackground()} paper-shadow rounded-sm ${className}`}
         >
             {/* Visual Fastener */}
             {type === 'pinned' && (
