@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PlannerProvider, usePlanner } from './context/PlannerContext';
 import { SoundProvider, useSound } from './context/SoundContext';
 import Header from './components/Header';
@@ -8,9 +8,16 @@ import { Volume2, VolumeX, Plus } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const PlannerLayout = () => {
-  const { activeTab, setActiveTab } = usePlanner();
+  const { activeTab, setActiveTab, expenseToPrefill } = usePlanner();
   const { toggleMute, isMuted, playClick } = useSound();
   const [showExpensePanel, setShowExpensePanel] = useState(false);
+
+  // Auto-open expense panel when a maturity is converted to a real expense
+  useEffect(() => {
+    if (expenseToPrefill) {
+      setShowExpensePanel(true);
+    }
+  }, [expenseToPrefill]);
 
   return (
     <div className="min-h-screen flex justify-center">
@@ -24,6 +31,7 @@ const PlannerLayout = () => {
             {[
               { id: 'dashboard', label: '📊 Tablero' },
               { id: 'planning', label: '📝 Plan' },
+              { id: 'calendar', label: '📅 Calendario' },
             ].map(tab => (
               <button
                 key={tab.id}

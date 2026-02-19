@@ -139,6 +139,25 @@ export const PlannerProvider = ({ children }) => {
         }));
     };
 
+    // Convert a maturity into a real expense and mark it as paid
+    const convertMaturityToExpense = (maturity) => {
+        const newExpense = {
+            id: Date.now().toString(),
+            amount: maturity.amount,
+            description: maturity.service,
+            categoryId: 'other', // sensible default; user can edit in tracker
+            type: maturity.type,
+            date: maturity.date,
+        };
+        setData(prev => ({
+            ...prev,
+            expenses: [newExpense, ...prev.expenses],
+            maturities: (prev.maturities || []).map(m =>
+                m.id === maturity.id ? { ...m, status: 'paid' } : m
+            ),
+        }));
+    };
+
     const value = {
         selectedMonth,
         setSelectedMonth,
@@ -159,7 +178,8 @@ export const PlannerProvider = ({ children }) => {
         // Maturities
         addMaturity,
         toggleMaturityStatus,
-        deleteMaturity
+        deleteMaturity,
+        convertMaturityToExpense
     };
 
     return (
