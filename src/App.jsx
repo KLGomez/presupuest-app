@@ -20,7 +20,7 @@ const PlannerLayout = () => {
   }, [expenseToPrefill]);
 
   return (
-    <div className="min-h-screen flex justify-center bg-[#f8f6f2] bg-[linear-gradient(#e5e2dc_1px,transparent_1px),linear-gradient(90deg,#e5e2dc_1px,transparent_1px)] bg-[size:40px_40px] px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen flex justify-center bg-[#f8f6f2] bg-[linear-gradient(#e5e2dc_1px,transparent_1px),linear-gradient(90deg,#e5e2dc_1px,transparent_1px)] bg-[size:40px_40px] px-6 sm:px-8 lg:px-8 py-10">
       <div className="w-full max-w-7xl mx-auto space-y-6">
         <Header />
 
