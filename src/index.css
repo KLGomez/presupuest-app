@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/* ===== THEME TOKENS ===== */
+:root {
+  --font-sans: 'Nunito', system-ui, -apple-system, sans-serif;
+  --font-hand: 'Gochi Hand', cursive;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-bg-app: #e2d5c3;
+  --color-text-main: #1e293b;
+  --color-text-muted: #64748b;
+}
+
+/* ===== BASE ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-app);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23bcaaa4' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== FONT ===== */
+.font-hand {
+  font-family: var(--font-hand);
+}
+
+/* ===== HAND-DRAWN CIRCLE ===== */
+.hand-circle {
+  border: 2px solid var(--color-danger);
+  border-radius: 50% 60% 40% 70% / 60% 50% 70% 40%;
+  position: relative;
+}
+
+/* ===== CURRENCY INPUT ===== */
+.input-currency-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 150px;
+}
+.input-currency-symbol {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-weight: bold;
+  pointer-events: none;
+}
+.input-currency {
+  padding-left: 24px;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #cbd5e1;
+  background: transparent;
+  font-weight: 700;
+  font-family: var(--font-hand);
+  color: var(--color-text-main);
+  transition: border-color 0.2s;
+}
+.input-currency:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ===== ELEMENT RESETS ===== */
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+input, select {
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-text-main);
+}
