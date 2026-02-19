@@ -77,10 +77,10 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
     if (activeSection === 'planning') {
         return (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 w-full max-w-lg mx-auto lg:max-w-none">
                     <BudgetPlanner />
                 </div>
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 w-full max-w-lg mx-auto lg:max-w-none">
                     <Almanac />
                     {/* Quick summary */}
                     <div className="w-full bg-white rounded-2xl shadow-xl shadow-neutral-400/20 border border-neutral-200/60 p-6 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
@@ -109,7 +109,7 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* LEFT COLUMN: Resumen del Mes */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 w-full max-w-lg mx-auto lg:max-w-none">
                 <div className="w-full bg-white rounded-2xl shadow-xl shadow-neutral-400/20 border border-neutral-200/60 p-6 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold font-hand text-slate-700">📌 Resumen del Mes</h2>
@@ -204,7 +204,7 @@ const Dashboard = ({ activeSection = 'dashboard' }) => {
             </div>
 
             {/* RIGHT COLUMN: Planificación Mensual */}
-            <div className="lg:col-span-1 flex flex-col gap-6 min-h-0">
+            <div className="lg:col-span-1 flex flex-col gap-6 min-h-0 w-full max-w-lg mx-auto lg:max-w-none">
                 {/* Almanac Widget - compact */}
                 <Almanac />
 
