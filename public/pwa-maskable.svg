@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfbf7" />
+      <stop offset="100%" stop-color="#f3ede2" />
+    </linearGradient>
+    <linearGradient id="primaryMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="goldMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadowMask" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#1e293b" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Full bleed background for maskable safe area -->
+  <rect width="512" height="512" fill="url(#bgMask)" />
+
+  <!-- Inner safe zone content (centered within 80% circle) -->
+  <g transform="translate(256 256) scale(0.82) translate(-256 -256)">
+    <!-- Ledger / Notebook Card -->
+    <g filter="url(#shadowMask)">
+      <rect x="112" y="96" width="288" height="330" rx="36" fill="#ffffff" stroke="#e2e8f0" stroke-width="5" />
+      <!-- Notebook Header -->
+      <path d="M112 136 C112 114 112 114 148 114 L364 114 C400 114 400 114 400 136 L400 172 L112 172 Z" fill="url(#primaryMask)" />
+      <!-- Spiral Rings -->
+      <rect x="150" y="86" width="16" height="42" rx="8" fill="#94a3b8" />
+      <rect x="214" y="86" width="16" height="42" rx="8" fill="#94a3b8" />
+      <rect x="278" y="86" width="16" height="42" rx="8" fill="#94a3b8" />
+      <rect x="342" y="86" width="16" height="42" rx="8" fill="#94a3b8" />
+      <!-- Lines -->
+      <line x1="150" y1="216" x2="362" y2="216" stroke="#f1f5f9" stroke-width="10" stroke-linecap="round" />
+      <line x1="150" y1="258" x2="290" y2="258" stroke="#f1f5f9" stroke-width="10" stroke-linecap="round" />
+      <line x1="150" y1="300" x2="330" y2="300" stroke="#f1f5f9" stroke-width="10" stroke-linecap="round" />
+    </g>
+
+    <!-- Golden Coin Badge -->
+    <g filter="url(#shadowMask)">
+      <circle cx="336" cy="336" r="70" fill="url(#goldMask)" stroke="#ffffff" stroke-width="8" />
+      <circle cx="336" cy="336" r="56" fill="none" stroke="#fef3c7" stroke-width="4" stroke-dasharray="8 6" />
+      <text x="336" y="360" font-family="-apple-system, system-ui, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="64" fill="#ffffff" text-anchor="middle">$</text>
+    </g>
+  </g>
+</svg>

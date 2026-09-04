@@ -28,7 +28,7 @@ const BudgetPlanner = () => {
                         onChange={(e) => updateIncome(e.target.value)}
                         onFocus={playClick}
                         placeholder="0"
-                        className="input-currency text-xl"
+                        className="input-currency text-xl min-h-[44px] py-1"
                         min="0"
                     />
                 </div>
@@ -71,7 +71,7 @@ const BudgetPlanner = () => {
                                 onChange={(e) => updateBudget(cat.id, e.target.value)}
                                 onFocus={playClick}
                                 placeholder="0"
-                                className="input-currency text-right text-base"
+                                className="input-currency text-right text-base min-h-[44px] py-1"
                                 min="0"
                             />
                         </div>

@@ -5,7 +5,7 @@ import { EXPENSE_TYPES } from '../utils/constants';
 import { formatCurrency } from '../utils/formatters';
 import NoteCard from './ui/NoteCard';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Check, AlertCircle, ArrowRight, Trash2 } from 'lucide-react';
+import { Check, AlertCircle, ArrowRight, Trash2, X } from 'lucide-react';
 
 const TYPE_COLORS = {
     need: '#6366f1', // indigo
@@ -131,17 +131,17 @@ const Calendar = () => {
     return (
         <div className="w-full relative">
             <NoteCard color="white" type="taped" className="overflow-visible">
-                <h2 className="text-2xl font-bold font-hand text-slate-700 mb-6 flex items-center justify-between">
+                <h2 className="text-xl sm:text-2xl font-bold font-hand text-slate-700 mb-4 sm:mb-6 flex items-center justify-between">
                     <span>📅 Vencimientos: {selectedMonth}</span>
                     <div className="text-xs font-sans text-slate-400 font-normal">
-                        Click en un día para agregar
+                        Toca un día para anotar
                     </div>
                 </h2>
 
                 {/* ── Day-of-week headers ── */}
-                <div className="grid grid-cols-7 gap-2 sm:gap-3 mb-2">
+                <div className="grid grid-cols-7 gap-1 sm:gap-3 mb-2">
                     {['Lun', 'Mar', 'Mié', 'Jue', 'Vié', 'Sáb', 'Dom'].map(d => (
-                        <div key={d} className="text-center font-hand font-bold text-slate-500 py-2 text-xs sm:text-sm border-b-2 border-neutral-200">
+                        <div key={d} className="text-center font-hand font-bold text-slate-500 py-1 sm:py-2 text-xs sm:text-sm border-b-2 border-neutral-200">
                             {d}
                         </div>
                     ))}
@@ -149,9 +149,9 @@ const Calendar = () => {
 
                 {/* ── Calendar grid ── */}
                 <div className="w-full overflow-x-auto">
-                    <div className="grid grid-cols-7 gap-2 sm:gap-3 bg-neutral-50 p-3 rounded-xl border border-neutral-200">
+                    <div className="grid grid-cols-7 gap-1.5 sm:gap-3 bg-neutral-50 p-2 sm:p-3 rounded-xl border border-neutral-200">
                         {blanks.map(b => (
-                            <div key={`blank-${b}`} className="aspect-square min-w-[42px]" />
+                            <div key={`blank-${b}`} className="aspect-square min-w-[36px] sm:min-w-[42px]" />
                         ))}
 
                         {days.map(day => {
@@ -166,10 +166,10 @@ const Calendar = () => {
                                     key={day}
                                     onClick={() => handleDayClick(day)}
                                     className={`
-                                    h-16 sm:h-20 md:h-24 relative rounded-xl border p-2
+                                    min-h-[52px] h-14 sm:h-20 md:h-24 relative rounded-xl border p-1 sm:p-2
                                     flex flex-col justify-between
-                                    cursor-pointer transition hover:shadow-md
-                                    text-xs sm:text-sm
+                                    cursor-pointer transition hover:shadow-md active:scale-95
+                                    text-xs sm:text-sm select-none
                                     ${isCurrentDay
                                             ? 'bg-yellow-50 border-yellow-200 shadow-sm'
                                             : 'bg-white border-neutral-200 hover:bg-neutral-50'
@@ -177,8 +177,8 @@ const Calendar = () => {
                                 `}
                                 >
                                     <span className={`
-                                    font-hand font-bold text-lg leading-none block
-                                    ${isCurrentDay ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}
+                                    font-hand font-bold text-base sm:text-lg leading-none block
+                                    ${isCurrentDay ? 'text-blue-600 font-extrabold' : 'text-slate-500 group-hover:text-slate-700'}
                                 `}>
                                         {day}
                                     </span>
@@ -200,7 +200,7 @@ const Calendar = () => {
                                             <div
                                                 key={m.id}
                                                 title={`${m.service} — ${formatCurrency(m.amount)} (${m.status === 'paid' ? 'Pagado' : 'Pendiente'})`}
-                                                className={`w-2 h-2 rounded-full border border-black/10 transition-opacity ${m.status === 'paid' ? 'opacity-35' : ''}`}
+                                                className={`w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full border border-black/10 transition-opacity ${m.status === 'paid' ? 'opacity-35' : ''}`}
                                                 style={{ backgroundColor: m.status === 'paid' ? '#94a3b8' : getTypeColor(m.type) }}
                                             />
                                         ))}
@@ -215,72 +215,73 @@ const Calendar = () => {
             {/* ── Day popup ─────────────────────────────────────────────── */}
             <AnimatePresence>
                 {selectedDay && (
-                    <div className="fixed inset-0 bg-black/20 backdrop-blur-[1px] z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 bg-black/30 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
                         <motion.div
-                            initial={{ scale: 0.85, opacity: 0, rotate: 3 }}
-                            animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                            exit={{ scale: 0.85, opacity: 0 }}
-                            className="max-w-sm w-full"
+                            initial={{ scale: 0.88, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.88, opacity: 0, y: 20 }}
+                            className="max-w-md w-full"
                         >
-                            <NoteCard color="yellow" rotate={-1} type="taped" className="shadow-xl">
+                            <NoteCard color="yellow" rotate={-1} type="taped" className="shadow-2xl">
 
                                 {/* Header */}
-                                <div className="flex justify-between items-start mb-4 border-b border-yellow-200 pb-2">
-                                    <h3 className="font-hand font-bold text-xl text-slate-700">
+                                <div className="flex justify-between items-center mb-4 border-b border-yellow-200 pb-2">
+                                    <h3 className="font-hand font-bold text-lg sm:text-xl text-slate-700">
                                         📅 Día {selectedDay} de {selectedMonth}
                                     </h3>
                                     <button
                                         onClick={() => setSelectedDay(null)}
-                                        className="text-slate-400 hover:text-slate-600 font-bold text-lg leading-none"
+                                        className="touch-target rounded-full text-slate-400 hover:text-slate-700 transition-colors"
+                                        aria-label="Cerrar modal de día"
                                     >
-                                        ✕
+                                        <X size={20} />
                                     </button>
                                 </div>
 
                                 {/* Maturity list */}
-                                <div className="space-y-2 mb-4 max-h-[38vh] overflow-y-auto pr-1">
+                                <div className="space-y-2.5 mb-4 max-h-[42vh] overflow-y-auto pr-1">
                                     {getDayMaturities(selectedDay).map(m => {
                                         const color = getTypeColor(m.type);
                                         const isPaid = m.status === 'paid';
                                         return (
                                             <div
                                                 key={m.id}
-                                                className={`p-2 rounded-lg bg-white/70 border border-yellow-200 transition-opacity ${isPaid ? 'opacity-60' : ''}`}
+                                                className={`p-3 rounded-xl bg-white/80 border border-yellow-200 transition-opacity ${isPaid ? 'opacity-60' : ''}`}
                                             >
                                                 {/* Row 1: dot + name + amount */}
-                                                <div className="flex items-center gap-2 mb-1.5">
+                                                <div className="flex items-center gap-2 mb-2">
                                                     <div
-                                                        className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                                                        className="w-3 h-3 rounded-full flex-shrink-0"
                                                         style={{ backgroundColor: isPaid ? '#94a3b8' : color }}
                                                     />
-                                                    <span className={`font-bold font-hand text-sm flex-1 ${isPaid ? 'line-through text-slate-400' : 'text-slate-700'}`}>
+                                                    <span className={`font-bold font-hand text-base flex-1 ${isPaid ? 'line-through text-slate-400' : 'text-slate-700'}`}>
                                                         {m.service}
                                                     </span>
-                                                    <span className="font-mono text-xs text-slate-600 font-bold">
+                                                    <span className="font-mono text-sm text-slate-700 font-bold">
                                                         {formatCurrency(m.amount)}
                                                     </span>
                                                 </div>
 
                                                 {/* Row 2: type badge + action buttons */}
-                                                <div className="flex items-center justify-between gap-1 flex-wrap">
+                                                <div className="flex items-center justify-between gap-1.5 flex-wrap pt-1 border-t border-yellow-100">
                                                     <span
-                                                        className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full text-white"
+                                                        className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full text-white"
                                                         style={{ backgroundColor: color }}
                                                     >
                                                         {getTypeLabel(m.type)}
                                                     </span>
 
-                                                    <div className="flex items-center gap-1 ml-auto">
+                                                    <div className="flex items-center gap-1.5 ml-auto">
                                                         {/* Toggle paid/pending */}
                                                         <button
                                                             onClick={() => handleToggleStatus(m.id)}
-                                                            className={`flex items-center gap-1 text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wide border transition-colors ${isPaid
+                                                            className={`touch-target min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide border transition-all ${isPaid
                                                                 ? 'bg-green-100 text-green-700 border-green-200 hover:bg-green-200'
-                                                                : 'bg-white border-slate-300 text-slate-500 hover:bg-slate-50'
+                                                                : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'
                                                                 }`}
                                                         >
                                                             {isPaid ? (
-                                                                <><Check size={9} /> Pagado</>
+                                                                <span className="flex items-center gap-1"><Check size={14} /> Pagado</span>
                                                             ) : (
                                                                 'Pendiente'
                                                             )}
@@ -290,20 +291,21 @@ const Calendar = () => {
                                                         {!isPaid && (
                                                             <button
                                                                 onClick={() => handleConvertToExpense(m)}
-                                                                className="flex items-center gap-0.5 text-[10px] px-2 py-1 bg-indigo-100 text-indigo-700 rounded border border-indigo-200 hover:bg-indigo-200 font-bold transition-colors"
+                                                                className="touch-target min-h-[40px] px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-lg border border-indigo-200 hover:bg-indigo-200 font-bold text-xs transition-all flex items-center gap-1"
                                                                 title="Registrar como Gasto Real"
                                                             >
-                                                                Convertir <ArrowRight size={9} />
+                                                                <span>Convertir</span> <ArrowRight size={12} />
                                                             </button>
                                                         )}
 
                                                         {/* Delete */}
                                                         <button
                                                             onClick={() => handleDelete(m.id)}
-                                                            className="flex items-center justify-center w-6 h-6 rounded text-slate-300 hover:text-red-500 hover:bg-red-50 border border-transparent hover:border-red-100 transition-colors"
+                                                            className="touch-target w-10 h-10 rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
                                                             title="Eliminar vencimiento"
+                                                            aria-label="Eliminar vencimiento"
                                                         >
-                                                            <Trash2 size={11} />
+                                                            <Trash2 size={16} />
                                                         </button>
                                                     </div>
                                                 </div>
@@ -312,28 +314,28 @@ const Calendar = () => {
                                     })}
 
                                     {getDayMaturities(selectedDay).length === 0 && (
-                                        <p className="text-center text-slate-400 text-sm italic py-3">
+                                        <p className="text-center text-slate-400 text-sm italic py-4">
                                             Nada anotado aún...
                                         </p>
                                     )}
                                 </div>
 
                                 {/* Add-new form */}
-                                <form onSubmit={handleSaveMaturity} className="bg-yellow-50/70 p-3 rounded-lg border border-yellow-200/60 space-y-2">
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-yellow-700 mb-1">+ Anotar vencimiento</p>
+                                <form onSubmit={handleSaveMaturity} className="bg-yellow-50/80 p-3 sm:p-4 rounded-xl border border-yellow-200/80 space-y-2.5">
+                                    <p className="text-[11px] font-bold uppercase tracking-widest text-yellow-800 mb-1">+ Anotar vencimiento</p>
 
                                     <input
-                                        className="w-full bg-transparent border-b border-yellow-300 font-hand font-bold text-base text-slateate-700 placeholder:text-yellow-600/40 focus:outline-none"
+                                        className="w-full bg-transparent border-b-2 border-yellow-300 font-hand font-bold text-base text-slate-700 placeholder:text-yellow-700/40 focus:outline-none min-h-[40px] py-1"
                                         placeholder="Nombre del servicio (ej: Luz)"
                                         value={formData.service}
                                         onChange={e => setFormData({ ...formData, service: e.target.value })}
                                         autoFocus
                                     />
 
-                                    <div className="flex gap-2">
+                                    <div className="grid grid-cols-2 gap-2">
                                         <input
                                             type="number"
-                                            className="w-1/2 bg-transparent border-b border-yellow-300 font-sans font-bold text-slate-700 placeholder:text-yellow-600/40 focus:outline-none text-sm"
+                                            className="w-full bg-transparent border-b-2 border-yellow-300 font-sans font-bold text-slate-700 placeholder:text-yellow-700/40 focus:outline-none text-base min-h-[40px] py-1"
                                             placeholder="$0.00"
                                             value={formData.amount}
                                             min="0.01"
@@ -341,7 +343,7 @@ const Calendar = () => {
                                             onChange={e => setFormData({ ...formData, amount: e.target.value })}
                                         />
                                         <select
-                                            className="w-1/2 bg-transparent border-b border-yellow-300 font-sans text-xs text-slate-600 focus:outline-none"
+                                            className="w-full bg-transparent border-b-2 border-yellow-300 font-sans text-sm font-semibold text-slate-700 focus:outline-none min-h-[40px] py-1"
                                             value={formData.type}
                                             onChange={e => setFormData({ ...formData, type: e.target.value })}
                                         >
@@ -353,7 +355,7 @@ const Calendar = () => {
 
                                     <button
                                         type="submit"
-                                        className="w-full bg-slate-800 text-white rounded py-1.5 font-hand font-bold text-sm hover:bg-slate-700 transition-colors mt-1"
+                                        className="w-full min-h-[44px] bg-slate-800 text-white rounded-xl py-2 font-hand font-bold text-base hover:bg-slate-700 active:scale-[0.99] transition-all mt-2 shadow-sm"
                                     >
                                         ✏️ Anotar
                                     </button>

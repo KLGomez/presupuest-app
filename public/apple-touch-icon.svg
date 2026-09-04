@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bgApple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfbf7" />
+      <stop offset="100%" stop-color="#f3ede2" />
+    </linearGradient>
+    <linearGradient id="primaryApple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="goldApple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadowApple" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e293b" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <rect width="192" height="192" fill="url(#bgApple)" />
+
+  <g filter="url(#shadowApple)">
+    <rect x="42" y="36" width="108" height="124" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
+    <path d="M42 50 C42 42 42 42 56 42 L136 42 C150 42 150 42 150 50 L150 64 L42 64 Z" fill="url(#primaryApple)" />
+    <rect x="56" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <rect x="80" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <rect x="104" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <rect x="128" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <line x1="56" y1="80" x2="136" y2="80" stroke="#f1f5f9" stroke-width="4" stroke-linecap="round" />
+    <line x1="56" y1="96" x2="110" y2="96" stroke="#f1f5f9" stroke-width="4" stroke-linecap="round" />
+    <line x1="56" y1="112" x2="124" y2="112" stroke="#f1f5f9" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <g filter="url(#shadowApple)">
+    <circle cx="126" cy="126" r="26" fill="url(#goldApple)" stroke="#ffffff" stroke-width="3" />
+    <circle cx="126" cy="126" r="21" fill="none" stroke="#fef3c7" stroke-width="1.5" stroke-dasharray="3 2" />
+    <text x="126" y="135" font-family="-apple-system, system-ui, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle">$</text>
+  </g>
+</svg>
