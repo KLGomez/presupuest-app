@@ -24,17 +24,17 @@ const Almanac = () => {
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-md p-6">
-            <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                <h3 className="font-hand font-bold text-base text-slate-700">📅 Vencimientos</h3>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+        <div className="bg-white dark:bg-slate-900/90 rounded-2xl shadow-md p-4 sm:p-6 border border-slate-100 dark:border-slate-800 transition-colors">
+            <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="font-hand font-bold text-base sm:text-lg text-slate-700 dark:text-slate-100">📅 Vencimientos</h3>
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide font-sans">
                     {monthNames[month - 1]} {year}
                 </span>
             </div>
 
-            <div className="grid grid-cols-7 gap-1 text-center mb-2">
+            <div className="grid grid-cols-7 gap-1 text-center mb-2 font-sans">
                 {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
-                    <span key={`${d}-${i}`} className="text-[10px] font-bold text-slate-400 py-1">{d}</span>
+                    <span key={`${d}-${i}`} className="text-[10px] font-bold text-slate-400 dark:text-slate-500 py-1">{d}</span>
                 ))}
             </div>
 
@@ -46,8 +46,8 @@ const Almanac = () => {
                         <div
                             key={day}
                             className={`
-                                min-h-[36px] sm:min-h-[40px] aspect-square flex items-center justify-center text-xs font-bold cursor-pointer rounded-lg relative transition-all active:scale-95
-                                ${hasPending ? 'hand-circle text-red-600' : hasAny ? 'text-emerald-600 bg-emerald-50 font-extrabold' : 'text-slate-600 hover:bg-slate-50'}
+                                min-h-[36px] sm:min-h-[40px] aspect-square flex items-center justify-center text-xs font-bold cursor-pointer rounded-xl relative transition-all active:scale-95 font-sans tabular-nums
+                                ${hasPending ? 'hand-circle text-red-600 dark:text-red-400' : hasAny ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 font-extrabold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}
                             `}
                             onClick={() => { playClick(); setActiveTab('calendar'); }}
                             title={hasAny ? 'Ver vencimientos' : ''}

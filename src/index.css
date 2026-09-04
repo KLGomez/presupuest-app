@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ===== THEME TOKENS ===== */
 :root {
   --font-sans: 'Nunito', system-ui, -apple-system, sans-serif;
@@ -9,7 +11,7 @@
   --color-danger: #ef4444;
   --color-success: #10b981;
   --color-warning: #f59e0b;
-  --color-bg-app: #e2d5c3;
+  --color-bg-app: #f8f6f2;
   --color-text-main: #1e293b;
   --color-text-muted: #64748b;
   --color-cream: #fbfaf5;
@@ -33,6 +35,31 @@
   --color-type-debt: #f59e0b;
 }
 
+.dark {
+  --color-bg-app: #090d16;
+  --color-text-main: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-cream: #0f172a;
+
+  /* Categorías con contraste y nitidez optimizados para Dark Mode */
+  --color-category-food: #fb7185;
+  --color-category-transport: #60a5fa;
+  --color-category-utilities: #facc15;
+  --color-category-entertainment: #c084fc;
+  --color-category-health: #2dd4bf;
+  --color-category-home: #fb923c;
+  --color-category-education: #a5b4fc;
+  --color-category-debt: #f43f5e;
+  --color-category-savings: #34d399;
+  --color-category-other: #94a3b8;
+
+  /* Tipos de gasto en modo oscuro */
+  --color-type-need: #818cf8;
+  --color-type-want: #f472b6;
+  --color-type-savings: #34d399;
+  --color-type-debt: #fbbf24;
+}
+
 /* ===== BASE & MOBILE ERGONOMICS ===== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -44,6 +71,7 @@ html {
   -webkit-text-size-adjust: 100%;
   touch-action: manipulation;
   overflow-x: hidden;
+  font-family: var(--font-sans);
 }
 
 body {
@@ -51,12 +79,13 @@ body {
   font-weight: 600;
   line-height: 1.5;
   color: var(--color-text-main);
-  background-color: #f8f6f2;
+  background-color: var(--color-bg-app);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   user-select: none;
   -webkit-user-select: none;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Permitir selección en inputs y datos editables */
@@ -75,6 +104,24 @@ button, a, input, select {
   input, select, textarea {
     font-size: 16px !important;
   }
+}
+
+/* ===== ANALOG NOTEBOOK GRID ===== */
+.bg-grid-notebook {
+  background-color: #f8f6f2;
+  background-image:
+    linear-gradient(#e5e2dc 1px, transparent 1px),
+    linear-gradient(90deg, #e5e2dc 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.dark .bg-grid-notebook,
+html.dark .bg-grid-notebook {
+  background-color: #090d16;
+  background-image:
+    linear-gradient(#1e293b 1px, transparent 1px),
+    linear-gradient(90deg, #1e293b 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 /* ===== SAFE AREA INSETS (IOS NOTCH / HOME INDICATOR) ===== */
@@ -108,6 +155,14 @@ button, a, input, select {
   font-family: var(--font-hand);
 }
 
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 /* ===== HAND-DRAWN CIRCLE ===== */
 .hand-circle {
   border: 2px solid var(--color-danger);
@@ -127,6 +182,13 @@ button, a, input, select {
     0 12px 24px -6px rgba(45, 35, 20, 0.08);
 }
 
+.dark .paper-shadow {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 12px 24px -6px rgba(0, 0, 0, 0.4);
+}
+
 .tape-top {
   position: absolute;
   top: -12px;
@@ -143,7 +205,14 @@ button, a, input, select {
   pointer-events: none;
 }
 
-/* ===== CURRENCY INPUT ===== */
+.dark .tape-top {
+  background-color: rgba(245, 158, 11, 0.2);
+  border-left: 2px dashed rgba(217, 119, 6, 0.35);
+  border-right: 2px dashed rgba(217, 119, 6, 0.35);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* ===== CURRENCY INPUT (NUNITO BOLD / TABULAR) ===== */
 .input-currency-wrapper {
   position: relative;
   display: inline-block;
@@ -155,6 +224,7 @@ button, a, input, select {
   transform: translateY(-50%);
   color: var(--color-text-muted);
   font-weight: bold;
+  font-family: var(--font-sans);
   pointer-events: none;
 }
 .input-currency {
@@ -164,9 +234,14 @@ button, a, input, select {
   border-bottom: 2px solid #cbd5e1;
   background: transparent;
   font-weight: 700;
-  font-family: var(--font-hand);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
   color: var(--color-text-main);
   transition: border-color 0.2s;
+}
+.dark .input-currency {
+  border-bottom-color: #334155;
+  color: #f1f5f9;
 }
 .input-currency:focus {
   outline: none;
@@ -178,6 +253,8 @@ button, a, input, select {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.dark ::-webkit-scrollbar-thumb { background: #334155; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
 /* ===== ELEMENT RESETS ===== */
 button {
@@ -192,4 +269,7 @@ input, select {
   font-family: inherit;
   font-size: 1rem;
   color: var(--color-text-main);
+}
+.dark input, .dark select {
+  color: #f1f5f9;
 }

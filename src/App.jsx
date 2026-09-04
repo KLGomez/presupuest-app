@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { PlannerProvider, usePlanner } from './context/PlannerContext';
 import { SoundProvider, useSound } from './context/SoundContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import ExpenseTracker from './components/ExpenseTracker';
 import BottomNav from './components/BottomNav';
-import { Volume2, VolumeX, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const PlannerLayout = () => {
   const { activeTab, setActiveTab, expenseToPrefill } = usePlanner();
-  const { toggleMute, isMuted, playClick } = useSound();
+  const { playClick } = useSound();
   const [showExpensePanel, setShowExpensePanel] = useState(false);
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
@@ -35,14 +36,14 @@ const PlannerLayout = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center bg-[#f8f6f2] bg-[linear-gradient(#e5e2dc_1px,transparent_1px),linear-gradient(90deg,#e5e2dc_1px,transparent_1px)] bg-[size:40px_40px] px-3 sm:px-6 lg:px-8 pt-safe pb-24 md:pb-8">
+    <div className="min-h-screen flex justify-center bg-grid-notebook px-4 sm:px-6 lg:px-8 pt-safe pb-24 md:pb-8 text-slate-800 dark:text-slate-100 transition-colors">
       <div className="w-full max-w-7xl mx-auto space-y-4 sm:space-y-6">
         <Header />
 
         {/* Desktop Top Bar: Controls (Hidden on mobile, replaced by BottomNav) */}
         <div className="hidden md:flex items-center justify-between">
           {/* Minimal Section Tabs */}
-          <div className="flex items-center gap-1 bg-white/60 backdrop-blur-sm rounded-lg p-1 shadow-sm border border-slate-200/50">
+          <div className="flex items-center gap-1 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm rounded-xl p-1 shadow-sm border border-slate-200/50 dark:border-slate-800">
             {[
               { id: 'dashboard', label: '📊 Tablero' },
               { id: 'planning', label: '📝 Plan' },
@@ -51,10 +52,11 @@ const PlannerLayout = () => {
               <button
                 key={tab.id}
                 onClick={() => { playClick(); setActiveTab(tab.id); }}
-                className={`px-4 py-2 rounded-lg text-sm font-hand font-bold transition-all ${activeTab === tab.id
-                  ? 'bg-white text-slate-800 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
-                  }`}
+                className={`px-4 py-2 rounded-lg text-sm font-hand font-bold transition-all ${
+                  activeTab === tab.id
+                    ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/50'
+                }`}
               >
                 {tab.label}
               </button>
@@ -65,18 +67,9 @@ const PlannerLayout = () => {
             {/* Add Expense Button */}
             <button
               onClick={() => { playClick(); setShowExpensePanel(true); }}
-              className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium text-sm shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all"
+              className="flex items-center gap-2 px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white rounded-xl font-medium text-sm shadow-md hover:bg-indigo-700 dark:hover:bg-indigo-600 hover:shadow-lg transition-all active:scale-95"
             >
-              <Plus size={16} /> Nuevo Gasto
-            </button>
-
-            {/* Sound Toggle */}
-            <button
-              onClick={toggleMute}
-              className="px-4 py-2 text-slate-500 hover:bg-white/60 rounded-lg transition-colors touch-target"
-              title={isMuted ? 'Activar sonido' : 'Silenciar'}
-            >
-              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+              <Plus size={18} /> Nuevo Gasto
             </button>
           </div>
         </div>
@@ -98,7 +91,7 @@ const PlannerLayout = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 transition-opacity"
+                className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 transition-opacity"
                 onClick={() => setShowExpensePanel(false)}
               />
               {/* Panel */}
@@ -108,27 +101,27 @@ const PlannerLayout = () => {
                 animate="visible"
                 exit="exit"
                 transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-                className={`fixed z-50 bg-[#fdfbf7] shadow-2xl overflow-y-auto overscroll-contain ${
+                className={`fixed z-50 bg-[#fdfbf7] dark:bg-slate-900 shadow-2xl overflow-y-auto overscroll-contain transition-colors ${
                   isMobile
-                    ? 'inset-x-0 bottom-0 max-h-[88vh] rounded-t-3xl border-t border-slate-200 safe-bottom-nav'
-                    : 'top-0 right-0 h-full w-full max-w-lg'
+                    ? 'inset-x-0 bottom-0 max-h-[88vh] rounded-t-3xl border-t border-slate-200 dark:border-slate-800 safe-bottom-nav'
+                    : 'top-0 right-0 h-full w-full max-w-lg border-l border-slate-200 dark:border-slate-800'
                 }`}
               >
                 {/* Drag Handle Indicator on Mobile */}
                 {isMobile && (
-                  <div className="pt-3 pb-1 flex justify-center sticky top-0 bg-[#fdfbf7] z-10">
-                    <div className="w-12 h-1.5 bg-slate-300 rounded-full" />
+                  <div className="pt-3 pb-1 flex justify-center sticky top-0 bg-[#fdfbf7] dark:bg-slate-900 z-10 transition-colors">
+                    <div className="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full" />
                   </div>
                 )}
 
                 <div className="p-4 sm:p-6">
                   <div className="flex items-center justify-between mb-4 sm:mb-6">
-                    <h2 className="text-xl sm:text-2xl font-bold font-hand text-slate-700">
+                    <h2 className="text-xl sm:text-2xl font-bold font-hand text-slate-700 dark:text-slate-100">
                       📂 Registro de Gastos
                     </h2>
                     <button
                       onClick={() => { playClick(); setShowExpensePanel(false); }}
-                      className="touch-target rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                      className="touch-target rounded-full text-slate-400 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                       aria-label="Cerrar panel"
                     >
                       <X size={20} />
@@ -141,7 +134,7 @@ const PlannerLayout = () => {
           )}
         </AnimatePresence>
 
-        <footer className="py-4 text-center text-slate-400 font-hand text-xs sm:text-sm">
+        <footer className="py-4 text-center text-slate-400 dark:text-slate-500 font-hand text-xs sm:text-sm">
           <p>Planner de Gastos Mensuales • {new Date().getFullYear()}</p>
         </footer>
       </div>
@@ -151,11 +144,13 @@ const PlannerLayout = () => {
 
 function App() {
   return (
-    <SoundProvider>
-      <PlannerProvider>
-        <PlannerLayout />
-      </PlannerProvider>
-    </SoundProvider>
+    <ThemeProvider>
+      <SoundProvider>
+        <PlannerProvider>
+          <PlannerLayout />
+        </PlannerProvider>
+      </SoundProvider>
+    </ThemeProvider>
   );
 }
 
