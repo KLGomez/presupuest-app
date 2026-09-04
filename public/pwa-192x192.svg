@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bg192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfbf7" />
+      <stop offset="100%" stop-color="#f3ede2" />
+    </linearGradient>
+    <linearGradient id="primary192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="gold192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadow192" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e293b" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="192" height="192" rx="42" fill="url(#bg192)" />
+  <rect x="2" y="2" width="188" height="188" rx="40" fill="none" stroke="#e2d5c3" stroke-width="2" />
+
+  <!-- Ledger / Notebook Card -->
+  <g filter="url(#shadow192)">
+    <rect x="42" y="36" width="108" height="124" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
+    <!-- Notebook Header -->
+    <path d="M42 50 C42 42 42 42 56 42 L136 42 C150 42 150 42 150 50 L150 64 L42 64 Z" fill="url(#primary192)" />
+    <!-- Spiral Rings -->
+    <rect x="56" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <rect x="80" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <rect x="104" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <rect x="128" y="32" width="6" height="16" rx="3" fill="#94a3b8" />
+    <!-- Lines -->
+    <line x1="56" y1="80" x2="136" y2="80" stroke="#f1f5f9" stroke-width="4" stroke-linecap="round" />
+    <line x1="56" y1="96" x2="110" y2="96" stroke="#f1f5f9" stroke-width="4" stroke-linecap="round" />
+    <line x1="56" y1="112" x2="124" y2="112" stroke="#f1f5f9" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <!-- Golden Coin Badge -->
+  <g filter="url(#shadow192)">
+    <circle cx="126" cy="126" r="26" fill="url(#gold192)" stroke="#ffffff" stroke-width="3" />
+    <circle cx="126" cy="126" r="21" fill="none" stroke="#fef3c7" stroke-width="1.5" stroke-dasharray="3 2" />
+    <text x="126" y="135" font-family="-apple-system, system-ui, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle">$</text>
+  </g>
+</svg>

@@ -8,9 +8,10 @@ const Almanac = () => {
     const [year, month] = selectedMonth.split('-').map(Number);
     const daysInMonth = new Date(year, month, 0).getDate();
     const firstDay = new Date(year, month - 1, 1).getDay();
+    const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
     const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-    const blanks = Array.from({ length: firstDay }, (_, i) => i);
+    const blanks = Array.from({ length: startOffset }, (_, i) => i);
 
     const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
@@ -32,7 +33,7 @@ const Almanac = () => {
             </div>
 
             <div className="grid grid-cols-7 gap-1 text-center mb-2">
-                {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((d, i) => (
+                {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
                     <span key={`${d}-${i}`} className="text-[10px] font-bold text-slate-400 py-1">{d}</span>
                 ))}
             </div>
@@ -45,8 +46,8 @@ const Almanac = () => {
                         <div
                             key={day}
                             className={`
-                                w-8 h-8 flex items-center justify-center text-xs font-bold cursor-pointer rounded-lg relative transition-colors
-                                ${hasPending ? 'hand-circle text-red-600' : hasAny ? 'text-emerald-600 bg-emerald-50' : 'text-slate-500 hover:bg-slate-50'}
+                                min-h-[36px] sm:min-h-[40px] aspect-square flex items-center justify-center text-xs font-bold cursor-pointer rounded-lg relative transition-all active:scale-95
+                                ${hasPending ? 'hand-circle text-red-600' : hasAny ? 'text-emerald-600 bg-emerald-50 font-extrabold' : 'text-slate-600 hover:bg-slate-50'}
                             `}
                             onClick={() => { playClick(); setActiveTab('calendar'); }}
                             title={hasAny ? 'Ver vencimientos' : ''}

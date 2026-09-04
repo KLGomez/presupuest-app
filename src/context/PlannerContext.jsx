@@ -1,10 +1,11 @@
-import { createContext, useState, useEffect, useContext, useRef } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import { CATEGORIES } from '../utils/constants';
 import { getMonthYearKey } from '../utils/formatters';
 
 const PlannerContext = createContext();
 
 const DEFAULT_MONTHLY_DATA = {
+    monthKey: '', // Afinidad explícita del mes (ej. '2026-09')
     income: 0,
     budgets: {}, // { categoryId: amount }
     expenses: [], // [{ id, amount, description, categoryId, type, date }]
@@ -12,29 +13,29 @@ const DEFAULT_MONTHLY_DATA = {
     filterType: 'all', // 'all', 'need', 'want', 'savings', 'debt'
 };
 
-// Helper: read monthly data from localStorage
+// Helper: lee datos mensuales asegurando que el objeto siempre porte su monthKey
 const loadMonthData = (monthKey) => {
     try {
         const stored = window.localStorage.getItem(`planner-${monthKey}`);
         if (stored) {
             const parsed = JSON.parse(stored);
-            return { ...DEFAULT_MONTHLY_DATA, ...parsed };
+            return { ...DEFAULT_MONTHLY_DATA, ...parsed, monthKey };
         }
     } catch (error) {
         console.error("Failed to load data", error);
     }
-    return { ...DEFAULT_MONTHLY_DATA };
+    return { ...DEFAULT_MONTHLY_DATA, monthKey };
 };
 
 export const PlannerProvider = ({ children }) => {
-    // Current month state
-    const [selectedMonth, setSelectedMonth] = useState(getMonthYearKey(new Date()));
+    // Mes activo inicial
+    const [selectedMonth, setSelectedMonth] = useState(() => getMonthYearKey(new Date()));
 
-    // Navigation State
+    // Estado de navegación
     const [activeTab, setActiveTab] = useState('dashboard');
     const [expenseToPrefill, setExpenseToPrefill] = useState(null);
 
-    // Global categories state (persisted separately, lazy init)
+    // Categorías globales (persistidas por separado)
     const [categories, setCategories] = useState(() => {
         try {
             const stored = window.localStorage.getItem('planner-categories');
@@ -44,23 +45,31 @@ export const PlannerProvider = ({ children }) => {
         }
     });
 
-    // Monthly data state — LAZY INIT from localStorage to prevent race condition
+    // Estado mensual inicializado de forma perezosa con el mes activo
     const [data, setData] = useState(() => loadMonthData(getMonthYearKey(new Date())));
 
-    // Guard: skip first save to prevent overwriting localStorage on mount
-    const isInitialMount = useRef(true);
+    /**
+     * Transición Atómica de Mes:
+     * En React 18/19, múltiples setState dentro de un evento se agrupan (batching).
+     * selectedMonth y data se actualizan juntos en el mismo render, eliminando estados intermedios.
+     */
+    const handleSetSelectedMonth = (newMonthOrFn) => {
+        const nextMonth = typeof newMonthOrFn === 'function' ? newMonthOrFn(selectedMonth) : newMonthOrFn;
+        if (nextMonth === selectedMonth) return;
 
-    // Load monthly data when month changes (NOT on initial mount)
+        setSelectedMonth(nextMonth);
+        setData(loadMonthData(nextMonth));
+    };
+
+    /**
+     * Persistencia Atómica y Segura:
+     * Solo se serializa si el monthKey de la data coincide exactamente con el selectedMonth activo.
+     */
     useEffect(() => {
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-            return; // Skip — data was already loaded via lazy init
+        if (!data.monthKey || data.monthKey !== selectedMonth) {
+            return; // ABORTA: Previene sobrescrituras cruzadas
         }
-        setData(loadMonthData(selectedMonth));
-    }, [selectedMonth]);
 
-    // Save monthly data when it changes
-    useEffect(() => {
         const key = `planner-${selectedMonth}`;
         try {
             window.localStorage.setItem(key, JSON.stringify(data));
@@ -69,7 +78,7 @@ export const PlannerProvider = ({ children }) => {
         }
     }, [selectedMonth, data]);
 
-    // Save categories when they change
+    // Guardar categorías globales al cambiar
     useEffect(() => {
         window.localStorage.setItem('planner-categories', JSON.stringify(categories));
     }, [categories]);
@@ -160,7 +169,7 @@ export const PlannerProvider = ({ children }) => {
 
     const value = {
         selectedMonth,
-        setSelectedMonth,
+        setSelectedMonth: handleSetSelectedMonth,
         categories,
         addCategory,
         data,
@@ -189,6 +198,7 @@ export const PlannerProvider = ({ children }) => {
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const usePlanner = () => {
     const context = useContext(PlannerContext);
     if (!context) {
